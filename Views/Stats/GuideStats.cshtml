@@ -1,0 +1,35 @@
+﻿@using LittleFish3._0.Models
+@{
+    List<Guide> guides = ViewBag.Guides;
+}
+
+<style>
+
+    .statsDisplay {
+        border-radius: 8px;
+        border: 3px solid #00ff21;
+        width: 30%;
+        font-size: 16px;
+        font-family: Calibri;
+        background-color: white;
+    }
+</style>
+
+
+<h1>Guide Stats</h1>
+<div class="statsDisplay">
+    @foreach (Guide g in guides)
+    {
+        <div style="display:flex;
+                                    align-content:space-between;
+                                           justify-content:space-between">
+            <div>
+                @g.Name
+            </div>
+            <div>
+                @g.SalesPercent %
+            </div>
+        </div>
+
+    }
+</div>

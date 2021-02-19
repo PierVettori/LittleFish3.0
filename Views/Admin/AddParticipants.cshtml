@@ -1,0 +1,72 @@
+﻿
+
+    <style>
+
+        .ParticipantDisplay {
+           width:50%;
+            font-size: 16px;
+            font-family: Calibri;
+            background-color: white;
+        }
+
+            .ParticipantDisplay div {
+                display: flex;
+                justify-content: space-between;
+            }
+
+            .partButt {
+                border-radius: 8px;
+                border: 3px solid #00ff21;
+                padding: 10px 10px;
+                font-size: 14px;
+                
+                background-color: white;
+            }
+    </style>
+
+
+
+@using LittleFish3._0.Models
+@{
+    TourType t = ViewBag.Tour;
+}
+
+<h1>Add Participants</h1>
+
+
+@using (Html.BeginForm("ProcessParticipants", "Admin", FormMethod.Get))
+{
+    <input type="hidden" value="@t.Id" name="tourId" />
+    
+    <input type="hidden" id="parId" name="parId" />
+    <div>
+        @foreach (People p in t.People)
+        {
+        <div class="ParticipantDisplay">
+            <div>
+                @p.Name
+            </div>
+        </div>
+        }
+
+        <div>
+            <input class="partButt" type="text" name="addPar" />
+
+        </div>
+        <div class="ParticipantDisplay">
+            <input class="partButt" type="submit" name="submit" value="Create" />
+        </div>
+    </div>
+
+
+}
+
+
+<script>
+    function ParDelete(a) {
+        var b = document.getElementById("parId");
+        b.value = a
+    }
+</script>
+
+

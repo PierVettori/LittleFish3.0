@@ -1,0 +1,74 @@
+﻿@using LittleFish3._0.Models
+@{
+    List<TourType> tours = ViewBag.Tours;
+
+    string day1 = DateTime.Now.ToString("yyyy-MM-dd");
+    string day2 = DateTime.Now.ToString("yyyy-MM-dd");
+
+    if (ViewBag.day1 != null && ViewBag.day2 != null)
+    {
+        day1 = DateTime.Parse(ViewBag.day1).ToString("yyyy-MM-dd");
+        day2 = DateTime.Parse(ViewBag.day2).ToString("yyyy-MM-dd");
+    }
+}
+
+
+<style>
+    .butbtutbut {
+        border-radius: 8px;
+        border: 3px solid #00ff21;
+        /*padding: 10px 10px;
+        font-size: 14px;
+        width: 100px;*/
+        background-color: white;
+    }
+
+    .EndOfDay {
+        align-items: center;
+        padding-top: 30px;
+        padding-bottom: 30px;
+        color: black;
+        font-size: 16px;
+        height: 20px;
+        width: 60%;
+        display: flex;
+        justify-content: space-between;
+        padding-right: 30px;
+        padding-left: 30px;
+    }
+
+        .EndOfDay div {
+            flex: 8;
+            font-family: Calibri;
+        }
+</style>
+@using (Html.BeginForm("Tourstats", "Stats", FormMethod.Get))
+{
+    <h1>Tour Stats</h1>
+    <div>
+        Select Dates between
+        <input type="date" name="firstDay" value="@day1" />
+        and
+        <input type="date" name="secondDay" value="@day2"/>
+    </div>
+    <div>
+        <input type="submit" name="dates" value="Find" class="butbtutbut" />
+    </div>
+
+
+    foreach (TourType t in tours)
+    {
+        <div class="EndOfDay">
+            <div>
+                @t.Type
+            </div>
+            @foreach (Tour tt in t.Tours)
+            {
+                <div>
+                    @tt.Pax
+                </div>
+            }
+        </div>
+
+    }
+}

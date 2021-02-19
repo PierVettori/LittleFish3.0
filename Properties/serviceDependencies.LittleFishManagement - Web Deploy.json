@@ -1,0 +1,10 @@
+{
+  "dependencies": {
+    "mssql1": {
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroup')]/providers/Microsoft.Sql/servers/piervettori/databases/LittleFishManagement",
+      "type": "mssql.azure",
+      "connectionId": "Server=tcp:piervettori.database.windows.net,1433;",
+      "secretStore": "AzureAppSettings"
+    }
+  }
+}

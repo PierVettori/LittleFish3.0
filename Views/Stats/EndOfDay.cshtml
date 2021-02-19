@@ -1,0 +1,219 @@
+﻿@using LittleFish3._0.Models
+
+<style>
+
+
+    .butbtutbut {
+        border-radius: 8px;
+        border: 3px solid #00ff21;
+        /*padding: 10px 10px;
+        font-size: 14px;
+        width: 100px;*/
+        background-color: white;
+    }
+
+
+
+
+    .EndOfDay {
+        align-items: center;
+        padding-top: 30px;
+        padding-bottom: 30px;
+        color: black;
+        font-size: 16px;
+        height: 20px;
+        width: 60%;
+        display: flex;
+        justify-content: space-between;
+        padding-right: 30px;
+        padding-left: 30px;
+    }
+
+        .EndOfDay div {
+            flex: 8;
+            font-family: Calibri;
+        }
+</style>
+
+@{
+    List<TourType> tourTypes = ViewBag.TourTypes;
+    List<Guide> guides = ViewBag.Guides;
+    int counter = 0;
+    int counter2 = 1;
+
+
+
+
+
+
+
+}
+
+@using (Html.BeginForm("ProcessEndOfDay", "Stats", FormMethod.Get))
+{
+<body onload="">
+    <input type="hidden" id="tourId" name="tourId"  />
+    <input type="hidden" id="groupNumber" name="groupNumber" />
+    <input type="hidden" id="check" name="check" />
+    <input type="hidden" id="DeleteGuide" name="DeleteGuideId" />
+
+    <h1>End Of Day</h1>
+    <section style="padding-top:10%">
+
+        @foreach (TourType t in tourTypes)
+        {
+
+            List<GuideNumbers> finalNumbers = new List<GuideNumbers>();
+
+            counter++;
+            counter2 = counter * 1000;
+            <div>
+                <div style="display:flex;
+                                    align-content:space-between;
+                                           justify-content:space-between; padding-bottom:10px;width:50%">
+                    <div>
+                        @t.Type
+                    </div>
+                    <div>
+                        <input type="hidden" value="@t.Id" onclick="show(this.value)" />
+                        <input class="butbtutbut" type="button" value="Show" name="@t.Id" onclick="show(@counter)" />
+                    </div>
+
+                </div>
+
+
+
+                <div style="display:none" id="@counter" class="EndOfDay">
+                    <div style="display:flex;
+                                    align-content:space-between;
+                                           justify-content:space-between; padding-bottom:10px;">
+
+                        @foreach (GuideNumbers g in t.GuideNumbers)
+                        {
+                            
+                            <div style="font-weight:bold">
+                                
+                                @g.Guide.Name
+
+                                @g.Pax  <input type="submit" name="DeleteGuide" value="X" style="
+                                            font-size:9px;
+                                                width:10px;height:9px;
+                                                padding:0px 2px 12px 2px;
+                                                    border-radius: 8px;
+                                                        border: 1px solid #00ff21;
+                                                        position:absolute;"                   
+                                                                                    onclick="deleteGuide(@g.Guide.Id,@t.Id)" />
+
+                            </div>
+                        }
+
+
+                       
+
+
+                    </div>
+
+                    @foreach (Tour tour in t.Tours)
+                    {
+                        
+                        if (tour.Person != null)
+                        {
+                            <div>
+
+                                @tour.Person.Name x @tour.Pax
+
+                            </div>
+                        }
+
+
+                    }
+
+                    <div style="display:flex;
+                                    align-content:space-between;
+                                           justify-content:space-between;width:50%">
+                        <div style="padding-top:10px;font-weight:bold">
+                           
+                            <div> Total Unassigned x @t.Pax </div>
+
+                        </div>
+                        <div>
+                            <input type="number" Id="@counter2" name="@t.Id" />
+                        </div>
+                        <div>
+                            <div class="dropdown">
+
+                                <a class="customButton" data-toggle="dropdown" href="#">
+                                    Add Guide
+                                    <span class="caret"></span>
+
+                                </a>
+                                <table class="dropdown-menu" role="menu">
+                                    <tr>
+                                        @foreach (Guide g in guides)
+                                        {
+                                            <td>
+
+                                                <input class="butbtutbut" type="submit" name="submit" value="@g.Name" onclick="group(@counter2,@t.Pax)" />
+                                            </td>
+                                        }
+                                    </tr>
+
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+
+        }
+    </section>
+</body>
+}
+
+
+<script>
+    function show(i) {
+
+        var picture = document.getElementById(i);
+
+        if (picture.style.display === "unset") {
+            picture.style.display = "none";
+        }
+        else {
+            picture.style.display = "unset";
+        }
+
+    }
+
+
+    function group(z,check) {
+        var y = document.getElementById(z).value;//this is the added stock value
+        if (y != 0) {//this validates entry
+            var stock = document.getElementById("groupNumber");//this is the top hidden input
+            stock.value = y;//this sets the top hidden inputs value to the added stock value
+        }
+        var id = document.getElementById(z).name;
+        var hiddenId = document.getElementById("tourId");
+        hiddenId.value = id;
+
+        
+        var hiddenId = document.getElementById("check");
+        hiddenId.value = check;
+
+    }
+
+    function deleteGuide(x,id) {
+        var guideId = document.getElementById("DeleteGuide");
+        guideId.value = x;
+
+        var tourId = document.getElementById("tourId");
+        tourId.value = id;
+    }
+
+
+
+
+</script>

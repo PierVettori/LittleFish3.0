@@ -1,0 +1,365 @@
+﻿@using LittleFish3._0.Models
+@using System.Web.Script.Serialization;
+@{
+    List<TourType> tourTypes = ViewBag.TourType;
+    List<MarketingTypes> marketingTypes = ViewBag.Markets;
+    List<People> peoples = ViewBag.People;
+    List<Guide> guides = ViewBag.Guides;
+
+    var serializer = new JavaScriptSerializer();
+
+    
+    var serializedGuides = serializer.Serialize(guides);
+}
+
+
+@{
+    var markets = new List<MarketingTypes>();
+
+    foreach (MarketingTypes m in marketingTypes)
+    {
+
+        markets.Add(new MarketingTypes() { Id = m.Id, Name = m.Name, LeadsTo = m.LeadsTo, Order = m.Order });
+
+    }
+
+
+    var serializedMarkets = serializer.Serialize(markets);
+    var people = new List<People>();
+    foreach(People p in peoples)
+    {
+        people.Add(new People() { Id = p.Id, TourId = p.TourId, Name = p.Name });
+    }
+    var serializedPeople = serializer.Serialize(people);
+}
+
+<style>
+
+    .butbtutbut {
+        border-radius: 8px;
+        border: 3px solid #00ff21;
+        padding: 10px 10px;
+        font-size: 14px;
+        width: 100px;
+        background-color: white;
+    }
+</style>
+@using (Html.BeginForm("TourPage", "Tour", FormMethod.Get))
+{
+<body onload="setPeople(0); setMarks(0)">
+    <h2>TourPage</h2>
+    <input type="hidden" id="text" name="tourId" />
+
+
+    <input type="hidden" id="firstMarket" name="firstMarket" />
+
+    <input type="hidden" id="secondMarket" name="secondMarket" />
+
+    <input type="hidden" id="guideId" name="guideId" />
+
+    <div id="showMessage">
+
+    </div>
+
+    <div id="info">
+
+    </div>
+    <div id="displayBit">
+        <div id="displayBit2">
+
+
+
+            @foreach (TourType t in tourTypes)
+            {
+                //var people = new List<People>();
+
+                //foreach (People p in t.People)
+                //{
+                //    if (people.Count == 0)
+                //    {
+                //        people.Add(new People() { Id = p.Id, Name = p.Name, TourId = t.Id });
+                //    }
+                //    else
+                //    {
+
+                //            if(.Id!=p.Id)
+                //            {
+                //                people.Add(new People() { Id = p.Id, Name = p.Name, TourId = t.Id });
+                //            }
+
+                //    }
+
+
+
+                //}
+
+
+                //var serializedPeople = serializer.Serialize(people);
+
+
+                <div>
+                    <input type="button" class="butbtutbut" value="@t.Type" onclick="setMarks(@serializedMarkets); setPeople(@serializedPeople); marketButtons(); setTour(@t.Id);" />
+                </div>
+
+
+            }
+
+
+
+        </div>
+    </div>
+    <div id="final">
+
+        @*<input type="button"  class="butbtutbut" value="Guide Sale" onclick="setGuides(@serializedGuides)" />*@
+
+    </div>
+
+    <div id="hide" style="display:none">
+        <div class="dropdown">
+
+            <a data-toggle="dropdown" href="#">
+                Guide Sale
+                <span class="caret"></span>
+
+            </a>
+            <table class="dropdown-menu" role="menu">
+                <tr>
+                    @foreach (Guide g in guides)
+                    {
+                        <td>
+
+                            <input type="submit" name="submit" value="@g.Name" onclick="setGuide(@g.Id)" />
+                        </td>
+                    }
+                </tr>
+
+            </table>
+        </div>
+    </div>
+</body>
+}
+
+
+<script>
+
+    //var guides = 0;
+    var num = 0;
+    var done = 0;
+    var mar = 0;
+    var people = 0;
+
+
+    function setMarks(t) {
+        mar = t;
+
+    }
+
+    function setPeople(t) {
+        people = t;
+
+    }
+    
+
+
+
+    function firstTry() {
+
+        const myNode = document.getElementById("displayBit");
+        while (myNode.firstChild) {
+            myNode.removeChild(myNode.lastChild);
+        }
+
+
+
+        function scopepreserver(a) {
+
+            return function () {
+                var firstValue = parseInt(document.getElementById(people[a].Name).value);
+                document.getElementById(people[a].Name).value = firstValue + 1;
+
+
+
+            };
+
+        }
+        if (num == 0) {
+           var msg= document.getElementById("showMessage")
+                    msg.innerHTML = "Participants";
+                    msg.style = "font-size:20px"
+            var tourLen = people.length;
+            var tourId = document.getElementById("text").value
+            for (i = 0; i < tourLen; i++) {
+                if (people[i].TourId == tourId) {
+
+                var btn = document.createElement("input");
+
+                btn.setAttribute("type", "button");
+                btn.setAttribute("value", people[i].Name);
+                btn.setAttribute("class", "butbtutbut");
+
+                var btn2 = document.createElement("input");
+
+                btn2.setAttribute("type", "number");
+                btn2.setAttribute("class", "butbtutbut");
+                btn2.setAttribute("value", 0);
+                btn2.setAttribute("id", people[i].Name);
+                btn2.setAttribute("name", people[i].Name);
+
+                btn.onclick = scopepreserver(i);
+
+
+                document.getElementById("displayBit").appendChild(btn);
+                    document.getElementById("displayBit").appendChild(btn2);
+
+            }
+        }
+            var subm = document.createElement("input");
+
+            subm.setAttribute("type", "submit");
+            subm.setAttribute("class", "butbtutbut");
+            subm.setAttribute("value", "Done");
+
+            subm.setAttribute("name", "submit");
+
+
+
+
+            document.getElementById("final").appendChild(subm);
+
+        }
+        num = 1;
+        
+
+        next();
+    }
+
+
+
+    function marketButtons() {
+        
+
+        const myNode = document.getElementById("displayBit");
+        while (myNode.firstChild) {
+            myNode.removeChild(myNode.lastChild);
+        }
+        if (done == 0) {
+            
+            var mLen = mar.length;
+
+            function butt2() {
+
+                const myNode = document.getElementById("displayBit");
+                while (myNode.firstChild) {
+                    myNode.removeChild(myNode.lastChild);
+                }
+
+
+                for (i = 0; i < mLen; i++) {
+
+                    if (mar[i].Order == 2) {
+
+                        var msg= document.getElementById("showMessage")
+                    msg.innerHTML = "Found from?";
+                    msg.style = "font-size:20px"
+                        var btn2 = document.createElement("input");
+
+
+                        btn2.setAttribute("type", "button");
+                        btn2.setAttribute("value", mar[i].Name);
+                        btn2.setAttribute("class", "butbtutbut");
+                        btn2.setAttribute("id", mar[i].Id);
+
+                        btn2.onclick = function () {
+                            var z = document.getElementById("secondMarket");
+                            x = this.id;
+                            z.value = x;
+                            firstTry();
+                        }
+                        document.getElementById("displayBit").appendChild(btn2);
+                    }
+                }
+
+            }
+
+
+
+            for (i = 0; i < mLen; i++) {
+                if (mar[i].Order == 1) {
+
+                    var msg= document.getElementById("showMessage")
+                    msg.innerHTML = "Booked from?";
+                    msg.style = "font-size:20px"
+                    var btn3 = document.createElement("input");
+
+
+                    btn3.setAttribute("type", "button");
+                    btn3.setAttribute("value", mar[i].Name);
+                    btn3.setAttribute("name", mar[i].LeadsTo);
+                    btn3.setAttribute("id", mar[i].Id);
+                    btn3.setAttribute("class", "butbtutbut");
+                    //btn3.onclick = butt2(2);
+                    btn3.onclick = function () {
+                        var a = this.id;
+                        var x = document.getElementById("firstMarket");
+                        x.value = a;
+                        if (this.name == 2) {
+                            butt2();
+                        }
+                        else {
+                            firstTry();
+                        }
+                    };
+                    document.getElementById("displayBit").appendChild(btn3);
+
+                }
+
+
+            }
+            done = 1;
+           
+        }
+
+
+
+    }
+
+
+
+
+    function setTour(a) {
+
+        var x = document.getElementById("text");
+        x.value = a;
+    }
+
+    function setGuide(a) {
+
+        var x = document.getElementById("guideId");
+        x.value = a;
+    }
+
+    function next() {
+
+
+
+        var hide = document.getElementById("hide");
+
+        if (hide.style.display === "unset") {
+            hide.style.display = "none";
+        }
+        else {
+            hide.style.display = "unset";
+        }
+    }
+
+
+
+    function load() {
+    num = 0;
+    done = 0;
+    mar = 0;
+    people = 0;
+    }
+
+
+</script>

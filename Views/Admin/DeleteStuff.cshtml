@@ -1,0 +1,175 @@
+﻿
+<style>
+
+    .CreateTour {
+        border-radius: 8px;
+        border: 3px solid #00ff21;
+        /*padding-bottom: 10px;*/
+        font-size: 16px;
+        font-family: Calibri;
+        background-color: white;
+    }
+
+
+    .statsDisplay {
+        border-radius: 8px;
+        border: 3px solid #00ff21;
+        width: 50%;
+        font-size: 16px;
+        font-family: Calibri;
+        background-color: white;
+    }
+
+        .statsDisplay div {
+            display: flex;
+            align-content: space-between;
+        }
+</style>
+
+
+
+@using LittleFish3._0.Models
+@{
+    List<TourType> tours = ViewBag.Tours;
+
+    List<MarketingOrder> types = ViewBag.Types;
+    List<Guide> guides = ViewBag.Guides;
+}
+@using (Html.BeginForm("DeleteStuff", "Admin", FormMethod.Get))
+{
+    <input type="hidden" name="tourId" id="tourId" />
+    <input type="hidden" name="participantId" id="participant" />
+    <input type="hidden" name="marketId" id="marketId" />  
+    <input type="hidden" name="guideId" id="guideId" />  
+    <h2>Delete things</h2>
+
+
+
+    <div>
+        @foreach (TourType t in tours)
+        {
+
+            <input class="CreateTour" type="submit" name="DeleteTour" value="Delete @t.Type" onclick="setTour(@t.Id)" />
+            <div class="statsDisplay">
+                <div style="padding-left:40%;
+                            font-family:Calibri;
+                                font-size:22px;
+                                    font-weight:bold">
+                    @t.Type
+                </div>
+                @foreach (People p in t.People)
+                {
+                    <div style="display:flex;
+                                    align-content:space-between;
+                                           justify-content:space-between">
+
+                        @p.Name             <input class="CreateTour" type="submit" name="deleteParticipant" value="Delete" onclick="setParticipant(@p.Id)" />
+                    </div>
+                }
+                <div style="padding-left:40%;
+                            font-family:Calibri;
+                                font-size:22px;
+                                    font-weight:bold">
+
+                </div>
+            </div>
+        }
+
+    </div>
+
+
+    <div>
+        @foreach (MarketingOrder mT in types)
+        {
+
+
+            <div class="statsDisplay">
+                <div style="padding-left:40%;
+                            font-family:Calibri;
+                                font-size:22px;
+                                    font-weight:bold">
+                    @mT.Name
+                </div>
+
+                @foreach (MarketingTypes m in mT.Marketingtypes)
+                {
+                    <div style="display:flex;
+                                    align-content:space-between;
+                                           justify-content:space-between">
+                        @m.Name  <input class="CreateTour" type="submit" name="deleteMarketType" value="Delete" onclick="sMarket(@m.Id)" />
+                    </div>
+                }
+            </div>
+        }
+
+
+    </div>
+
+   
+    <div class="statsDisplay">
+        <div style="padding-left:40%;
+                            font-family:Calibri;
+                                font-size:22px;
+                                    font-weight:bold">
+            Guides
+        </div>
+                @foreach (Guide g in guides)
+                {
+                    <div style="display:flex;
+                                            align-content:space-between;
+                                                   justify-content:space-between">
+
+                        @g.Name  <input class="CreateTour" type="submit" name="deleteGuide" value="Delete" onclick="setGuide(@g.Id)" />
+                    </div>
+
+                }
+
+            
+        </div>
+    
+
+
+        }
+
+        <script>
+
+            function setParticipant(participantId) {
+
+                var x = document.getElementById("participant");
+                x.value = participantId;
+
+
+
+            }
+
+            function sMarket(marketId) {
+
+                var x = document.getElementById("marketId");
+                x.value = marketId;
+
+
+
+            }
+
+            function setTour(q) {
+
+                var x = document.getElementById("tourId");
+                x.value = q;
+
+            }
+
+            function setGuide(q) {
+
+                var x = document.getElementById("guideId");
+                x.value = q;
+
+            }
+
+
+
+
+
+
+
+
+        </script>

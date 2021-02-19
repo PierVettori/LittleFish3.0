@@ -1,0 +1,78 @@
+﻿@using LittleFish3._0.Models
+
+
+
+<style>
+
+    .ParticipantDisplay {
+        padding-top: 10px;
+        width: 50%;
+        font-size: 16px;
+        font-family: Calibri;
+        background-color: white;
+    }
+
+        .ParticipantDisplay div {
+            display: flex;
+            justify-content: space-between;
+        }
+
+    .partButt {
+        border-radius: 8px;
+        border: 3px solid #00ff21;
+        padding: 10px 10px;
+        font-size: 14px;
+        background-color: white;
+    }
+</style>
+@{
+    List<MarketingOrder> mo = ViewBag.MarketOrders;
+}
+@using (Html.BeginForm("CreateMarkets", "Admin", FormMethod.Get))
+{
+    <input type="hidden" id="marketTypeId" name="marketType" />
+    <h2>CreateMarkets</h2>
+    <div class="ParticipantDisplay">
+
+
+        <div>
+            Name:  <input type="text" name="name" />
+        </div>
+    </div>
+    <div class="ParticipantDisplay">
+        <div>
+            Leads to?  <input type="checkbox" name="leadsTo" />
+        </div>
+    </div>
+
+    <div>
+        <div class="dropdown">
+
+            <a class="customButton" data-toggle="dropdown" href="#">
+                Select Group
+                <span class="caret"></span>
+
+            </a>
+            <table class="dropdown-menu" role="menu">
+                <tr>
+                    @foreach (MarketingOrder m in mo)
+                    {
+                        <td>
+
+                            <input type="submit" name="submit" value="@m.Name" onclick="moom(@m.Id)" />
+                        </td>
+                    }
+                </tr>
+
+            </table>
+        </div>
+    </div>
+}
+
+<script>
+
+    function moom(x) {
+        var q = document.getElementById("marketTypeId");
+        q.value = x;
+    }
+</script>

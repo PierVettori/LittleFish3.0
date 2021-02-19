@@ -1,0 +1,75 @@
+﻿@using LittleFish3._0.Models
+@{
+    List<MarketingOrder> types = ViewBag.Types;
+    List<Marketing> markets = ViewBag.Markets;
+
+    string day1 = DateTime.Now.ToString("yyyy-MM-dd");
+    string day2 = DateTime.Now.ToString("yyyy-MM-dd");
+
+    if (ViewBag.day1 != null && ViewBag.day2 != null)
+    {
+        day1 = DateTime.Parse(ViewBag.day1).ToString("yyyy-MM-dd");
+        day2 = DateTime.Parse(ViewBag.day2).ToString("yyyy-MM-dd");
+    }
+}
+
+<style>
+
+    .statsDisplay {
+        border-radius: 8px;
+        border: 3px solid #00ff21;
+        width: 50%;
+        font-size: 16px;
+        font-family: Calibri;
+        background-color: white;
+    }
+</style>
+
+<h1>Market Stats</h1>
+@using (Html.BeginForm("MarketStats", "Stats", FormMethod.Get))
+{
+    <div>
+        Select Dates between
+        <input type="date" name="firstDay"value="@day1" />
+        and
+        <input type="date" name="secondDay"value="@day2" />
+    </div>
+    <div>
+        <input type="submit" name="dates" value="Find" />
+    </div>
+
+
+    <div>
+        @foreach (MarketingOrder mT in types)
+        {
+            <div class="statsDisplay">
+                <div style="padding-left:40%;
+                            font-family:Calibri;
+                                font-size:22px;
+                                    font-weight:bold">
+                    @mT.Name
+                </div>
+                @if (mT.Marketingtypes != null)
+                {
+                    foreach (MarketingTypes m in mT.Marketingtypes)
+                    {
+                        foreach (Marketing mar in markets)
+                        {
+                            if (m.Id == mar.MarketTypeId)
+                            {
+                                <div>
+
+                                    @m.Name @mar.Pax %
+                                </div>
+                            }
+                        }
+                }
+                }
+            </div>
+        }
+
+
+    </div>
+
+}
+
